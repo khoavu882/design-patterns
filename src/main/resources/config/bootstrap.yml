@@ -1,0 +1,17 @@
+# ===================================================================
+# Spring Cloud Config bootstrap configuration for the "dev" profile
+# In prod profile, properties will be overwritten by the ones defined in bootstrap-prod.yml
+# ===================================================================
+spring:
+  cloud:
+    config:
+      fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
+      uri: http://6RhHjHcNn8uDApvYm3ntxw7BDg4ufQ:${jhipster.registry.password}@45.77.35.189:8761/config
+      # name of the config server's property source (file.yml) that we want to use
+      name: gift
+      profile: dev # profile(s) of the property source
+      label: master # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
+jhipster:
+  registry:
+    password: TE3MX9ER8BtFYBQRFqzwdDr79pbHAY

@@ -1,0 +1,83 @@
+cache:
+  key: '$CI_COMMIT_REF_NAME'
+  paths:
+    - .maven/
+stages:
+  - check
+  - build
+  - test
+  - analyze
+  - package
+  - release
+  - deploy
+before_script:
+  - export NG_CLI_ANALYTICS="false"
+  - export MAVEN_USER_HOME=`pwd`/.maven
+
+nohttp:
+  stage: check
+  script:
+    - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+
+maven-compile:
+  stage: build
+  script:
+    - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+  artifacts:
+    paths:
+      - target/classes/
+      - target/generated-sources/
+    expire_in: 1 day
+
+maven-test:
+  stage: test
+  script:
+    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+    paths:
+      - target/surefire-reports
+      - target/failsafe-reports
+      - target/site
+    expire_in: 1 day
+
+sonar-analyze:
+  stage: analyze
+  dependencies:
+    - maven-test
+  script:
+    - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://45.77.35.189:9000 -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+  allow_failure: true
+
+maven-package:
+  stage: package
+  script:
+    - ./mvnw -ntp verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+  artifacts:
+    paths:
+      - target/*.jar
+      - target/classes
+    expire_in: 1 day
+  only:
+    - develop
+# Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
+docker-push:
+  stage: release
+  dependencies:
+    - maven-package
+  script:
+    - ./mvnw -ntp jib:build -Pdev  -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+  only:
+    - develop
+
+deploy:
+  stage: deploy
+  dependencies:
+    - docker-push
+  script:
+    - ssh -tt root@139.180.189.44 " docker-compose -f /home/docker/gift.yml down || true && sleep 5s && docker-compose -f /home/docker/gift.yml pull && docker-compose -f /home/docker/gift.yml up -d && exit"
+  only:
+    - develop

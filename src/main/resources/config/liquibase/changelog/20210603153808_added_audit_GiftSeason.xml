@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <changeSet id="20210603153808-added-audit" author="jhipster">
+        <addColumn tableName="gift_season">
+            <column name="created_by" type="varchar(50)"></column>
+            <column name="created_date" type="timestamp"></column>
+            <column name="last_modified_by" type="varchar(50)"></column>
+            <column name="last_modified_date" type="timestamp"></column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

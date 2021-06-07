@@ -1,0 +1,8 @@
+{
+  "generator-jhipster:7.0.1": {
+    "promptValues": {
+      "packageName": "com.malu.base.gift",
+      "nativeLanguage": "vi"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "GiftSeason",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "unique", "required"],
+      "fieldValidateRulesMaxlength": "200"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "icon",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "200"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "gift",
+      "otherEntityRelationshipName": "giftSeason",
+      "relationshipName": "gift"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "giftProvider",
+      "otherEntityRelationshipName": "giftSeason",
+      "relationshipName": "giftProvider"
+    }
+  ],
+  "entityTableName": "gift_season",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "microserviceName": "gift",
+  "clientRootFolder": "gift",
+  "databaseType": "sql",
+  "changelogDate": "20210603153808"
+}

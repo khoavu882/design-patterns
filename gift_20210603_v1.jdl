@@ -1,0 +1,63 @@
+entity Gift{
+    code String maxlength(20) unique,
+    name String maxlength(200),
+    description String maxlength(500),
+    icon String maxlength(200),
+    mediaPath String maxlength(200),
+    originalPrice BigDecimal required,
+    price BigDecimal required,
+    publishDate Instant,
+    startDate Instant,
+    expireDate Instant,
+    useGuide String,
+    terms String,
+    tags String maxlength(500),
+    status EnumGiftStatus,
+    userId String
+}
+
+entity GiftSeason {
+    name String maxlength(200) unique required,
+    description String maxlength(500),
+    icon String maxlength(200),
+}
+
+entity GiftLang{
+	name String maxlength(200),
+    description String maxlength(500),
+    useGuide String,
+    terms String,
+    langCode String maxlength(10),
+    status ActionStatus
+}
+
+entity GiftProvider{
+    code String maxlength(20) unique,
+    name String maxlength(200),
+    website String maxlength(50),
+    icon String maxlength(200),
+    status ActionStatus
+}
+
+relationship OneToMany{
+    GiftSeason{gift} to Gift{giftSeason}
+	GiftProvider{giftSeason} to GiftSeason{giftProvider},
+    Gift{languages} to GiftLang{gift},
+}
+
+enum EnumGiftStatus {
+	ACTIVATED, DEACTIVATED, EXPIRED, SOLD
+}
+
+enum ActionStatus {
+	ACTIVATED, DEACTIVATED, DELETED
+}
+
+// Set pagination options
+paginate * with pagination
+
+// Use Data Transfer Objects (DTO)
+ dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl

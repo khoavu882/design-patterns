@@ -1,0 +1,57 @@
+{
+  "name": "GiftLang",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "200"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "useGuide",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "terms",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "langCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "10"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "ActionStatus",
+      "fieldValues": "ACTIVATED,DEACTIVATED,DELETED"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "gift",
+      "otherEntityRelationshipName": "languages",
+      "relationshipName": "gift"
+    }
+  ],
+  "entityTableName": "gift_lang",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "microserviceName": "gift",
+  "clientRootFolder": "gift",
+  "databaseType": "sql",
+  "changelogDate": "20210603153809"
+}
