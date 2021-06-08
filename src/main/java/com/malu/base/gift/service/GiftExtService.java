@@ -36,7 +36,7 @@ public interface GiftExtService extends GiftService {
      * @param giftExtDTO the entity to update.
      * @return the persisted entity.
      */
-    G update(GiftExtDTO giftExtDTO);
+    Gift update(GiftExtDTO giftExtDTO);
 
     /**
      * Get the "id" gift.

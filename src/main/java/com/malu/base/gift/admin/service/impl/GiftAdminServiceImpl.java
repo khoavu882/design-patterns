@@ -29,6 +29,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -67,43 +70,24 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
 
     @Override
     public GiftAdminVM createByAdmin(GiftAdminDTO giftAdminDTO) {
-        Gson gson = new Gson();
-        GiftExtDTO giftExtDTO = new GiftExtDTO();
-        Optional<GiftLangAdminDTO> optDefaultLanguage = giftAdminDTO.getLanguages().stream()
-            .filter(lang -> lang.getLangCode().equals(ApplicationConstant.LANGUAGE_DEFAULT)).findFirst();
-        if (optDefaultLanguage.isPresent()) {
-            giftExtDTO.setCode(giftAdminDTO.getCode());
-            giftExtDTO.setName(optDefaultLanguage.get().getName());
-            giftExtDTO.setDescription(optDefaultLanguage.get().getDescription());
-            giftExtDTO.setIcon(giftAdminDTO.getIcon());
-            giftExtDTO.setMediaPath(giftAdminDTO.getMediaPath());
-            giftExtDTO.setPrice(giftAdminDTO.getPrice());
-            giftExtDTO.setOriginalPrice(giftAdminDTO.getOriginalPrice());
-            giftExtDTO.setPublishDate(giftAdminDTO.getPublishDate());
-            giftExtDTO.setStartDate(giftAdminDTO.getStartDate());
-            giftExtDTO.setExpireDate(giftAdminDTO.getExpireDate());
-            giftExtDTO.setUseGuide(giftAdminDTO.getUseGuide());
-            giftExtDTO.setTerms(giftAdminDTO.getTerms());
-            giftExtDTO.setTags(gson.toJson(giftAdminDTO.getTags()));
-            giftExtDTO.setUserId(giftAdminDTO.getUserId());
-            giftExtDTO.setStatus(EnumGiftStatus.ACTIVATED);
-//            giftExtDTO.setLanguages(giftLangExtMapper.toDto(giftLangAdminDTOMapper.toEntity(giftAdminDTO.getLanguages())));
-//            GiftSeason giftSeason = giftSeasonAdminService.findOneById(giftAdminDTO.getGiftSeasonId() == null ? 1L : giftAdminDTO.getGiftSeasonId());
-//            giftExtDTO.setGiftSeason(giftSeasonExtMapper.toDto(giftSeason));
-        } else {
-            throw new BadRequestAlertException(EnumErrors.GIFT_DEFAULT_LANGUAGE_EMPTY);
-        }
+        GiftExtDTO giftExtDTO = initGift(giftAdminDTO);
         Gift gift = create(giftExtDTO);
-        giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift);
+        giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift, false);
         return giftAdminVMMapper.toDto(gift);
     }
 
     @Override
     public GiftAdminVM updateByAdmin(GiftAdminDTO giftAdminDTO) {
+        GiftExtDTO giftExtDTO = initGift(giftAdminDTO);
+        giftExtDTO.setId(giftAdminDTO.getId());
+        Gift gift = update(giftExtDTO);
+            giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift, true);
+        return giftAdminVMMapper.toDto(gift);
+    }
+
+    private GiftExtDTO initGift(GiftAdminDTO giftAdminDTO) {
         Gson gson = new Gson();
         GiftExtDTO giftExtDTO = new GiftExtDTO();
-        if(giftAdminDTO.getId() == null) throw new BadRequestAlertException(EnumErrors.GIFT_NOT_FOUND);
-        Gift gift = this.findOneById(giftAdminDTO.getId());
         Optional<GiftLangAdminDTO> optDefaultLanguage = giftAdminDTO.getLanguages().stream()
             .filter(lang -> lang.getLangCode().equals(ApplicationConstant.LANGUAGE_DEFAULT)).findFirst();
         if (optDefaultLanguage.isPresent()) {
@@ -120,7 +104,6 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
             giftExtDTO.setUseGuide(giftAdminDTO.getUseGuide());
             giftExtDTO.setTerms(giftAdminDTO.getTerms());
             giftExtDTO.setTags(gson.toJson(giftAdminDTO.getTags()));
-            giftExtDTO.setUserId(giftAdminDTO.getUserId());
             giftExtDTO.setStatus(EnumGiftStatus.ACTIVATED);
 //            giftExtDTO.setLanguages(giftLangExtMapper.toDto(giftLangAdminDTOMapper.toEntity(giftAdminDTO.getLanguages())));
 //            GiftSeason giftSeason = giftSeasonAdminService.findOneById(giftAdminDTO.getGiftSeasonId() == null ? 1L : giftAdminDTO.getGiftSeasonId());
@@ -128,9 +111,7 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
         } else {
             throw new BadRequestAlertException(EnumErrors.GIFT_DEFAULT_LANGUAGE_EMPTY);
         }
-        gift = create(giftExtDTO);
-        giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift);
-        return giftAdminVMMapper.toDto(gift);
+        return giftExtDTO;
     }
 
     @Override

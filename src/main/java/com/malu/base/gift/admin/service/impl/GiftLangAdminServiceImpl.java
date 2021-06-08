@@ -33,19 +33,24 @@ public class GiftLangAdminServiceImpl extends GiftLangExtServiceImpl implements 
     }
 
     @Override
-    public void translateGift(List<GiftLangAdminDTO> giftLangAdminDTOList, Gift gift) {
-        giftLangAdminDTOList.forEach(giftLangAdminDTO -> {
-            //May be use mapper to convert
-            GiftLangExtDTO giftLangExtDTO = new GiftLangExtDTO();
-            giftLangExtDTO.setName(giftLangAdminDTO.getName());
-            giftLangExtDTO.setDescription(giftLangAdminDTO.getDescription());
-            giftLangExtDTO.setLangCode(giftLangAdminDTO.getLangCode());
-            giftLangExtDTO.setTerms(giftLangAdminDTO.getTerms());
-            giftLangExtDTO.setUseGuide(giftLangAdminDTO.getUseGuide());
-            giftLangExtDTO.setGift(giftExtMapper.toDto(gift));
-            giftLangExtDTO.setStatus(ActionStatus.ACTIVATED);
-            GiftLang giftLang = this.create(giftLangExtDTO);
-            gift.getLanguages().add(giftLang);
-        });
+    public void translateGift(List<GiftLangAdminDTO> giftLangAdminDTOList, Gift gift, boolean isCreate) {
+
+            giftLangAdminDTOList.forEach(giftLangAdminDTO -> {
+                //May be use mapper to convert
+                GiftLangExtDTO giftLangExtDTO = new GiftLangExtDTO();
+                giftLangExtDTO.setName(giftLangAdminDTO.getName());
+                giftLangExtDTO.setDescription(giftLangAdminDTO.getDescription());
+                giftLangExtDTO.setLangCode(giftLangAdminDTO.getLangCode());
+                giftLangExtDTO.setTerms(giftLangAdminDTO.getTerms());
+                giftLangExtDTO.setUseGuide(giftLangAdminDTO.getUseGuide());
+                giftLangExtDTO.setGift(giftExtMapper.toDto(gift));
+                giftLangExtDTO.setStatus(ActionStatus.ACTIVATED);
+                GiftLang giftLang = null;
+                if(isCreate)
+                    giftLang = this.create(giftLangExtDTO);
+                else
+                    giftLang = this.update(giftLangExtDTO);
+                gift.getLanguages().add(giftLang);
+            });
     }
 }

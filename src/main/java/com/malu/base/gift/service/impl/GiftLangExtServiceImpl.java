@@ -2,17 +2,21 @@ package com.malu.base.gift.service.impl;
 
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.GiftLang;
+import com.malu.base.gift.domain.enumeration.EnumErrors;
 import com.malu.base.gift.repository.GiftLangExtRepository;
 import com.malu.base.gift.repository.GiftLangRepository;
 import com.malu.base.gift.service.GiftLangExtService;
 import com.malu.base.gift.service.dto.GiftLangExtDTO;
 import com.malu.base.gift.service.mapper.GiftLangExtMapper;
 import com.malu.base.gift.service.mapper.GiftLangMapper;
+import com.malu.base.gift.web.rest.errors.BadRequestAlertException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * Created by Khoa Vu.
@@ -51,6 +55,14 @@ public class GiftLangExtServiceImpl extends GiftLangServiceImpl implements GiftL
 
     @Override
     public GiftLang update(GiftLangExtDTO giftLangExtDTO) {
+        findOneByLanguageCodeAndGiftId(giftLangExtDTO.getLangCode(), giftLangExtDTO.getGiftId());
         return null;
+    }
+
+    @Override
+    public GiftLang findOneByLanguageCodeAndGiftId(String languageCode, Long gitId) {
+        Optional<GiftLang> giftLangOptional = giftLangExtRepository.findByLangCodeAndGiftId(languageCode, gitId);
+        if(giftLangOptional.isEmpty()) throw new BadRequestAlertException(EnumErrors.GIFT_LANG_NOT_FOUND);
+        return giftLangOptional.get();
     }
 }

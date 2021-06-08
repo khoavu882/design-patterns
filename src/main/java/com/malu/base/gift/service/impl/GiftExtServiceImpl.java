@@ -7,7 +7,6 @@ import com.malu.base.gift.repository.GiftExtRepository;
 import com.malu.base.gift.repository.GiftRepository;
 import com.malu.base.gift.service.GiftExtService;
 import com.malu.base.gift.service.dto.GiftExtDTO;
-import com.malu.base.gift.service.dto.GiftLangExtDTO;
 import com.malu.base.gift.service.mapper.GiftExtMapper;
 import com.malu.base.gift.service.mapper.GiftMapper;
 import com.malu.base.gift.web.rest.errors.BadRequestAlertException;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -46,7 +44,7 @@ public class GiftExtServiceImpl extends GiftServiceImpl implements GiftExtServic
 
     @Override
     public Gift save(Gift gift) {
-        return giftExtRepository.save(gift);
+        return giftExtRepository.saveAndFlush(gift);
     }
 
     @Override
@@ -69,7 +67,11 @@ public class GiftExtServiceImpl extends GiftServiceImpl implements GiftExtServic
     public Gift update(GiftExtDTO giftExtDTO) {
         if(giftExtDTO.getId() == null) throw new BadRequestAlertException(EnumErrors.GIFT_NOT_FOUND);
         Gift gift = findOneById(giftExtDTO.getId());
-        return null;
+        Gift newGift = giftExtMapper.toEntity(giftExtDTO);
+        newGift.setId(gift.getId());
+        newGift.setLanguages(gift.getLanguages());
+        newGift.setStatus(gift.getStatus());
+        return save(newGift);
     }
 
     @Override

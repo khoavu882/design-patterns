@@ -34,4 +34,13 @@ public interface GiftLangExtService extends GiftLangService {
      * @return the persisted entity.
      */
     GiftLang update(GiftLangExtDTO giftLangExtDTO);
+
+    /**
+     * Get GiftLang by Language Code and Gift ID
+     *
+     * @param languageCode .
+     * @param gitId .
+     * @return the persisted entity.
+     */
+    GiftLang findOneByLanguageCodeAndGiftId(String languageCode, Long gitId);
 }

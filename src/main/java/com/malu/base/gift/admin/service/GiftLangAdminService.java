@@ -31,7 +31,7 @@ public interface GiftLangAdminService extends GiftLangService {
      * @param gift parent of the entity to save.
      * @return the persisted entity.
      */
-    void translateGift(List<GiftLangAdminDTO> giftLangAdminDTOList, Gift gift);
+    void translateGift(List<GiftLangAdminDTO> giftLangAdminDTOList, Gift gift, boolean isCreate);
 
     /**
      * Create a giftLang.
