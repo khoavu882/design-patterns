@@ -14,6 +14,7 @@ import com.malu.base.gift.admin.web.rest.vm.mapper.GiftAdminVMMapper;
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.Gift;
 import com.malu.base.gift.domain.GiftProvider;
+import com.malu.base.gift.domain.enumeration.ActionStatus;
 import com.malu.base.gift.domain.enumeration.EnumErrors;
 import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import com.malu.base.gift.repository.GiftRepository;
@@ -125,12 +126,17 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
     }
 
     @Override
-    public Page<GiftAdminVM> findAllWithFilterByAdmin(String keyword, Pageable pageable) {
-        return null;
+    public Page<GiftAdminVM> findAllWithFilterByAdmin(String keyword, ActionStatus status, Pageable pageable) {
+        return findAllWithFilter(keyword, status, pageable).map(giftAdminVMMapper::toDto);
     }
 
     @Override
-    public GiftAdminVM findOneByAdmin(Long id) {
+    public GiftAdminVM adminFindOneById(Long id) {
         return giftAdminVMMapper.toDto(findOneById(id));
+    }
+
+    @Override
+    public GiftAdminVM adminFindOneByHashCode(String hashCode) {
+        return giftAdminVMMapper.toDto(findOneByHashCode(hashCode));
     }
 }
