@@ -5,9 +5,7 @@ import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -20,7 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "gift")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Gift extends AbstractAuditingEntity implements Serializable {
+public class Gift implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,16 +27,24 @@ public class Gift extends AbstractAuditingEntity implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Size(max = 20)
-    @Column(name = "code", length = 20, unique = true)
+    @Size(max = 200)
+    @Column(name = "hash_code", length = 200, unique = true)
+    private String hashCode;
+
+    @Size(max = 200)
+    @Column(name = "code", length = 200, unique = true)
     private String code;
 
     @Size(max = 200)
-    @Column(name = "name", length = 200)
-    private String name;
+    @Column(name = "serial", length = 200)
+    private String serial;
 
     @Size(max = 500)
-    @Column(name = "description", length = 500)
+    @Column(name = "name", length = 500)
+    private String name;
+
+    @Size(max = 2000)
+    @Column(name = "description", length = 2000)
     private String description;
 
     @Size(max = 200)
@@ -66,27 +72,30 @@ public class Gift extends AbstractAuditingEntity implements Serializable {
     @Column(name = "expire_date")
     private Instant expireDate;
 
-    @Column(name = "use_guide")
+    @Size(max = 5000)
+    @Column(name = "use_guide", length = 5000)
     private String useGuide;
 
-    @Column(name = "terms")
+    @Size(max = 5000)
+    @Column(name = "terms", length = 5000)
     private String terms;
 
-    @Size(max = 500)
-    @Column(name = "tags", length = 500)
+    @Size(max = 5000)
+    @Column(name = "tags", length = 5000)
     private String tags;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private EnumGiftStatus status;
 
-    @Column(name = "user_id")
+    @Size(max = 20)
+    @Column(name = "user_id", length = 20)
     private String userId;
 
     @OneToMany(mappedBy = "gift")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "gift" }, allowSetters = true)
-    private List<GiftLang> languages = new ArrayList<>();
+    private Set<GiftLang> languages = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "gifts", "giftProvider" }, allowSetters = true)
@@ -106,6 +115,19 @@ public class Gift extends AbstractAuditingEntity implements Serializable {
         return this;
     }
 
+    public String getHashCode() {
+        return this.hashCode;
+    }
+
+    public Gift hashCode(String hashCode) {
+        this.hashCode = hashCode;
+        return this;
+    }
+
+    public void setHashCode(String hashCode) {
+        this.hashCode = hashCode;
+    }
+
     public String getCode() {
         return this.code;
     }
@@ -117,6 +139,19 @@ public class Gift extends AbstractAuditingEntity implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getSerial() {
+        return this.serial;
+    }
+
+    public Gift serial(String serial) {
+        this.serial = serial;
+        return this;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
     }
 
     public String getName() {
@@ -301,11 +336,11 @@ public class Gift extends AbstractAuditingEntity implements Serializable {
         this.userId = userId;
     }
 
-    public List<GiftLang> getLanguages() {
+    public Set<GiftLang> getLanguages() {
         return this.languages;
     }
 
-    public Gift languages(List<GiftLang> giftLangs) {
+    public Gift languages(Set<GiftLang> giftLangs) {
         this.setLanguages(giftLangs);
         return this;
     }
@@ -322,7 +357,7 @@ public class Gift extends AbstractAuditingEntity implements Serializable {
         return this;
     }
 
-    public void setLanguages(List<GiftLang> giftLangs) {
+    public void setLanguages(Set<GiftLang> giftLangs) {
         if (this.languages != null) {
             this.languages.forEach(i -> i.setGift(null));
         }
@@ -369,7 +404,9 @@ public class Gift extends AbstractAuditingEntity implements Serializable {
     public String toString() {
         return "Gift{" +
             "id=" + getId() +
+            ", hashCode='" + getHashCode() + "'" +
             ", code='" + getCode() + "'" +
+            ", serial='" + getSerial() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", icon='" + getIcon() + "'" +

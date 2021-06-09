@@ -3,17 +3,13 @@ package com.malu.base.gift.admin.web.rest.vm;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
-import com.malu.base.gift.service.dto.GiftSeasonDTO;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -25,7 +21,11 @@ public class GiftAdminVM implements Serializable {
 
     private Long id;
 
+    private String hashCode;
+
     private String code;
+
+    private String serial;
 
     private String name;
 
@@ -35,9 +35,9 @@ public class GiftAdminVM implements Serializable {
 
     private String mediaPath;
 
-    private BigDecimal price;
-
     private BigDecimal originalPrice;
+
+    private BigDecimal price;
 
     private Instant publishDate;
 
@@ -57,10 +57,8 @@ public class GiftAdminVM implements Serializable {
 
     private List<GiftLangAdminVM> languages = new ArrayList<>();
 
-    private GiftSeasonAdminVM giftSeason;
-
     @JsonIgnore
-    private List<GiftAdminVM> subGifts = new ArrayList<>();
+    private GiftSeasonAdminVM giftSeason;
 
     @JsonIgnore
     private String langCode;

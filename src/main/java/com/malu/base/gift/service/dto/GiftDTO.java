@@ -14,13 +14,19 @@ public class GiftDTO implements Serializable {
 
     private Long id;
 
-    @Size(max = 20)
+    @Size(max = 200)
+    private String hashCode;
+
+    @Size(max = 200)
     private String code;
 
     @Size(max = 200)
-    private String name;
+    private String serial;
 
     @Size(max = 500)
+    private String name;
+
+    @Size(max = 2000)
     private String description;
 
     @Size(max = 200)
@@ -41,15 +47,18 @@ public class GiftDTO implements Serializable {
 
     private Instant expireDate;
 
+    @Size(max = 5000)
     private String useGuide;
 
+    @Size(max = 5000)
     private String terms;
 
-    @Size(max = 500)
+    @Size(max = 5000)
     private String tags;
 
     private EnumGiftStatus status;
 
+    @Size(max = 20)
     private String userId;
 
     private GiftSeasonDTO giftSeason;
@@ -62,12 +71,28 @@ public class GiftDTO implements Serializable {
         this.id = id;
     }
 
+    public String getHashCode() {
+        return hashCode;
+    }
+
+    public void setHashCode(String hashCode) {
+        this.hashCode = hashCode;
+    }
+
     public String getCode() {
         return code;
     }
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
     }
 
     public String getName() {
@@ -216,7 +241,9 @@ public class GiftDTO implements Serializable {
     public String toString() {
         return "GiftDTO{" +
             "id=" + getId() +
+            ", hashCode='" + getHashCode() + "'" +
             ", code='" + getCode() + "'" +
+            ", serial='" + getSerial() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", icon='" + getIcon() + "'" +

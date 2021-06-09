@@ -22,13 +22,19 @@ public class GiftExtDTO implements Serializable {
 
     private Long id;
 
-    @Size(max = 20)
+    @Size(max = 200)
+    private String hashCode;
+
+    @Size(max = 200)
     private String code;
 
     @Size(max = 200)
-    private String name;
+    private String serial;
 
     @Size(max = 500)
+    private String name;
+
+    @Size(max = 2000)
     private String description;
 
     @Size(max = 200)
@@ -38,10 +44,10 @@ public class GiftExtDTO implements Serializable {
     private String mediaPath;
 
     @NotNull
-    private BigDecimal price;
+    private BigDecimal originalPrice;
 
     @NotNull
-    private BigDecimal originalPrice;
+    private BigDecimal price;
 
     private Instant publishDate;
 
@@ -49,15 +55,18 @@ public class GiftExtDTO implements Serializable {
 
     private Instant expireDate;
 
+    @Size(max = 5000)
     private String useGuide;
 
+    @Size(max = 5000)
     private String terms;
 
-    @Size(max = 500)
+    @Size(max = 5000)
     private String tags;
 
     private EnumGiftStatus status;
 
+    @Size(max = 20)
     private String userId;
 
     private GiftSeasonExtDTO giftSeason;

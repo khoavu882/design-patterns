@@ -20,6 +20,7 @@ import com.malu.base.gift.service.impl.GiftExtServiceImpl;
 import com.malu.base.gift.service.mapper.GiftLangExtMapper;
 import com.malu.base.gift.service.mapper.GiftMapper;
 import com.malu.base.gift.service.mapper.GiftSeasonExtMapper;
+import com.malu.base.gift.util.GenerateUtil;
 import com.malu.base.gift.web.rest.errors.BadRequestAlertException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -72,7 +74,7 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
     public GiftAdminVM createByAdmin(GiftAdminDTO giftAdminDTO) {
         GiftExtDTO giftExtDTO = initGift(giftAdminDTO);
         Gift gift = create(giftExtDTO);
-        giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift, false);
+        giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift, true);
         return giftAdminVMMapper.toDto(gift);
     }
 
@@ -81,7 +83,7 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
         GiftExtDTO giftExtDTO = initGift(giftAdminDTO);
         giftExtDTO.setId(giftAdminDTO.getId());
         Gift gift = update(giftExtDTO);
-            giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift, true);
+            giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift, false);
         return giftAdminVMMapper.toDto(gift);
     }
 
@@ -91,7 +93,9 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
         Optional<GiftLangAdminDTO> optDefaultLanguage = giftAdminDTO.getLanguages().stream()
             .filter(lang -> lang.getLangCode().equals(ApplicationConstant.LANGUAGE_DEFAULT)).findFirst();
         if (optDefaultLanguage.isPresent()) {
+            giftExtDTO.setHashCode(UUID.randomUUID().toString());
             giftExtDTO.setCode(giftAdminDTO.getCode());
+            giftExtDTO.setSerial(giftAdminDTO.getSerial());
             giftExtDTO.setName(optDefaultLanguage.get().getName());
             giftExtDTO.setDescription(optDefaultLanguage.get().getDescription());
             giftExtDTO.setIcon(giftAdminDTO.getIcon());

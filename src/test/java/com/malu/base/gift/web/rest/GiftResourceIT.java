@@ -40,8 +40,14 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class GiftResourceIT {
 
+    private static final String DEFAULT_HASH_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_HASH_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_CODE = "AAAAAAAAAA";
     private static final String UPDATED_CODE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SERIAL = "AAAAAAAAAA";
+    private static final String UPDATED_SERIAL = "BBBBBBBBBB";
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -113,7 +119,9 @@ class GiftResourceIT {
      */
     public static Gift createEntity(EntityManager em) {
         Gift gift = new Gift()
+            .hashCode(DEFAULT_HASH_CODE)
             .code(DEFAULT_CODE)
+            .serial(DEFAULT_SERIAL)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .icon(DEFAULT_ICON)
@@ -139,7 +147,9 @@ class GiftResourceIT {
      */
     public static Gift createUpdatedEntity(EntityManager em) {
         Gift gift = new Gift()
+            .hashCode(UPDATED_HASH_CODE)
             .code(UPDATED_CODE)
+            .serial(UPDATED_SERIAL)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .icon(UPDATED_ICON)
@@ -176,7 +186,9 @@ class GiftResourceIT {
         List<Gift> giftList = giftRepository.findAll();
         assertThat(giftList).hasSize(databaseSizeBeforeCreate + 1);
         Gift testGift = giftList.get(giftList.size() - 1);
+        assertThat(testGift.getHashCode()).isEqualTo(DEFAULT_HASH_CODE);
         assertThat(testGift.getCode()).isEqualTo(DEFAULT_CODE);
+        assertThat(testGift.getSerial()).isEqualTo(DEFAULT_SERIAL);
         assertThat(testGift.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testGift.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testGift.getIcon()).isEqualTo(DEFAULT_ICON);
@@ -260,7 +272,9 @@ class GiftResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(gift.getId().intValue())))
+            .andExpect(jsonPath("$.[*].hashCode").value(hasItem(DEFAULT_HASH_CODE)))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
+            .andExpect(jsonPath("$.[*].serial").value(hasItem(DEFAULT_SERIAL)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
@@ -289,7 +303,9 @@ class GiftResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(gift.getId().intValue()))
+            .andExpect(jsonPath("$.hashCode").value(DEFAULT_HASH_CODE))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
+            .andExpect(jsonPath("$.serial").value(DEFAULT_SERIAL))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.icon").value(DEFAULT_ICON))
@@ -326,7 +342,9 @@ class GiftResourceIT {
         // Disconnect from session so that the updates on updatedGift are not directly saved in db
         em.detach(updatedGift);
         updatedGift
+            .hashCode(UPDATED_HASH_CODE)
             .code(UPDATED_CODE)
+            .serial(UPDATED_SERIAL)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .icon(UPDATED_ICON)
@@ -355,7 +373,9 @@ class GiftResourceIT {
         List<Gift> giftList = giftRepository.findAll();
         assertThat(giftList).hasSize(databaseSizeBeforeUpdate);
         Gift testGift = giftList.get(giftList.size() - 1);
+        assertThat(testGift.getHashCode()).isEqualTo(UPDATED_HASH_CODE);
         assertThat(testGift.getCode()).isEqualTo(UPDATED_CODE);
+        assertThat(testGift.getSerial()).isEqualTo(UPDATED_SERIAL);
         assertThat(testGift.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testGift.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testGift.getIcon()).isEqualTo(UPDATED_ICON);
@@ -449,11 +469,7 @@ class GiftResourceIT {
         Gift partialUpdatedGift = new Gift();
         partialUpdatedGift.setId(gift.getId());
 
-        partialUpdatedGift
-            .description(UPDATED_DESCRIPTION)
-            .publishDate(UPDATED_PUBLISH_DATE)
-            .startDate(UPDATED_START_DATE)
-            .tags(UPDATED_TAGS);
+        partialUpdatedGift.serial(UPDATED_SERIAL).originalPrice(UPDATED_ORIGINAL_PRICE).price(UPDATED_PRICE).useGuide(UPDATED_USE_GUIDE);
 
         restGiftMockMvc
             .perform(
@@ -467,19 +483,21 @@ class GiftResourceIT {
         List<Gift> giftList = giftRepository.findAll();
         assertThat(giftList).hasSize(databaseSizeBeforeUpdate);
         Gift testGift = giftList.get(giftList.size() - 1);
+        assertThat(testGift.getHashCode()).isEqualTo(DEFAULT_HASH_CODE);
         assertThat(testGift.getCode()).isEqualTo(DEFAULT_CODE);
+        assertThat(testGift.getSerial()).isEqualTo(UPDATED_SERIAL);
         assertThat(testGift.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testGift.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testGift.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testGift.getIcon()).isEqualTo(DEFAULT_ICON);
         assertThat(testGift.getMediaPath()).isEqualTo(DEFAULT_MEDIA_PATH);
-        assertThat(testGift.getOriginalPrice()).isEqualByComparingTo(DEFAULT_ORIGINAL_PRICE);
-        assertThat(testGift.getPrice()).isEqualByComparingTo(DEFAULT_PRICE);
-        assertThat(testGift.getPublishDate()).isEqualTo(UPDATED_PUBLISH_DATE);
-        assertThat(testGift.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testGift.getOriginalPrice()).isEqualByComparingTo(UPDATED_ORIGINAL_PRICE);
+        assertThat(testGift.getPrice()).isEqualByComparingTo(UPDATED_PRICE);
+        assertThat(testGift.getPublishDate()).isEqualTo(DEFAULT_PUBLISH_DATE);
+        assertThat(testGift.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testGift.getExpireDate()).isEqualTo(DEFAULT_EXPIRE_DATE);
-        assertThat(testGift.getUseGuide()).isEqualTo(DEFAULT_USE_GUIDE);
+        assertThat(testGift.getUseGuide()).isEqualTo(UPDATED_USE_GUIDE);
         assertThat(testGift.getTerms()).isEqualTo(DEFAULT_TERMS);
-        assertThat(testGift.getTags()).isEqualTo(UPDATED_TAGS);
+        assertThat(testGift.getTags()).isEqualTo(DEFAULT_TAGS);
         assertThat(testGift.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testGift.getUserId()).isEqualTo(DEFAULT_USER_ID);
     }
@@ -497,7 +515,9 @@ class GiftResourceIT {
         partialUpdatedGift.setId(gift.getId());
 
         partialUpdatedGift
+            .hashCode(UPDATED_HASH_CODE)
             .code(UPDATED_CODE)
+            .serial(UPDATED_SERIAL)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .icon(UPDATED_ICON)
@@ -525,7 +545,9 @@ class GiftResourceIT {
         List<Gift> giftList = giftRepository.findAll();
         assertThat(giftList).hasSize(databaseSizeBeforeUpdate);
         Gift testGift = giftList.get(giftList.size() - 1);
+        assertThat(testGift.getHashCode()).isEqualTo(UPDATED_HASH_CODE);
         assertThat(testGift.getCode()).isEqualTo(UPDATED_CODE);
+        assertThat(testGift.getSerial()).isEqualTo(UPDATED_SERIAL);
         assertThat(testGift.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testGift.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testGift.getIcon()).isEqualTo(UPDATED_ICON);

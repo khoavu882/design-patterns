@@ -55,8 +55,8 @@ public class GiftLangExtServiceImpl extends GiftLangServiceImpl implements GiftL
 
     @Override
     public GiftLang update(GiftLangExtDTO giftLangExtDTO) {
-        findOneByLanguageCodeAndGiftId(giftLangExtDTO.getLangCode(), giftLangExtDTO.getGiftId());
-        return null;
+        GiftLang giftLang = findOneByLanguageCodeAndGiftId(giftLangExtDTO.getLangCode(), giftLangExtDTO.getGiftId());
+        return save(giftLang);
     }
 
     @Override
