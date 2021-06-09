@@ -86,6 +86,7 @@ public class CacheConfiguration {
             createCache(cm, com.malu.base.gift.domain.GiftLang.class.getName(), jcacheConfiguration);
             createCache(cm, com.malu.base.gift.domain.GiftProvider.class.getName(), jcacheConfiguration);
             createCache(cm, com.malu.base.gift.domain.GiftProvider.class.getName() + ".giftSeasons", jcacheConfiguration);
+            createCache(cm, com.malu.base.gift.domain.GiftProvider.class.getName() + ".gifts", jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
     }

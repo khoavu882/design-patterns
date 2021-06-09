@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.malu.base.gift.domain.enumeration.ActionStatus;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -51,6 +49,11 @@ public class GiftProvider extends AbstractAuditingEntity implements Serializable
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "gifts", "giftProvider" }, allowSetters = true)
     private List<GiftSeason> giftSeasons = new ArrayList<>();
+
+    @OneToMany(mappedBy = "giftProvider")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "languages", "giftSeason", "giftProvider" }, allowSetters = true)
+    private List<Gift> gifts = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -160,6 +163,37 @@ public class GiftProvider extends AbstractAuditingEntity implements Serializable
             giftSeasons.forEach(i -> i.setGiftProvider(this));
         }
         this.giftSeasons = giftSeasons;
+    }
+
+    public List<Gift> getGifts() {
+        return this.gifts;
+    }
+
+    public GiftProvider gifts(List<Gift> gifts) {
+        this.setGifts(gifts);
+        return this;
+    }
+
+    public GiftProvider addGift(Gift gift) {
+        this.gifts.add(gift);
+        gift.setGiftProvider(this);
+        return this;
+    }
+
+    public GiftProvider removeGift(Gift gift) {
+        this.gifts.remove(gift);
+        gift.setGiftProvider(null);
+        return this;
+    }
+
+    public void setGifts(List<Gift> gifts) {
+        if (this.gifts != null) {
+            this.gifts.forEach(i -> i.setGiftProvider(null));
+        }
+        if (gifts != null) {
+            gifts.forEach(i -> i.setGiftProvider(this));
+        }
+        this.gifts = gifts;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

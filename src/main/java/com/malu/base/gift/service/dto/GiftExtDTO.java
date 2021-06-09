@@ -71,6 +71,8 @@ public class GiftExtDTO implements Serializable {
 
     private GiftSeasonExtDTO giftSeason;
 
+    private GiftProviderExtDTO giftProvider;
+
     @Valid
     @NotEmpty
     private List<GiftLangExtDTO> languages = new ArrayList<>();

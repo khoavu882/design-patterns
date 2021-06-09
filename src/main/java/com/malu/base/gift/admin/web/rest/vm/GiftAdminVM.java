@@ -58,7 +58,7 @@ public class GiftAdminVM implements Serializable {
     private List<GiftLangAdminVM> languages = new ArrayList<>();
 
     @JsonIgnore
-    private GiftSeasonAdminVM giftSeason;
+    private GiftProviderAdminVM giftProvider;
 
     @JsonIgnore
     private String langCode;

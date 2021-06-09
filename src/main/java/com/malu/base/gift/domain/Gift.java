@@ -5,7 +5,9 @@ import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -18,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "gift")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Gift implements Serializable {
+public class Gift extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -95,11 +97,15 @@ public class Gift implements Serializable {
     @OneToMany(mappedBy = "gift")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "gift" }, allowSetters = true)
-    private Set<GiftLang> languages = new HashSet<>();
+    private List<GiftLang> languages = new ArrayList<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "gifts", "giftProvider" }, allowSetters = true)
     private GiftSeason giftSeason;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "giftSeasons", "gifts" }, allowSetters = true)
+    private GiftProvider giftProvider;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -336,11 +342,11 @@ public class Gift implements Serializable {
         this.userId = userId;
     }
 
-    public Set<GiftLang> getLanguages() {
+    public List<GiftLang> getLanguages() {
         return this.languages;
     }
 
-    public Gift languages(Set<GiftLang> giftLangs) {
+    public Gift languages(List<GiftLang> giftLangs) {
         this.setLanguages(giftLangs);
         return this;
     }
@@ -357,7 +363,7 @@ public class Gift implements Serializable {
         return this;
     }
 
-    public void setLanguages(Set<GiftLang> giftLangs) {
+    public void setLanguages(List<GiftLang> giftLangs) {
         if (this.languages != null) {
             this.languages.forEach(i -> i.setGift(null));
         }
@@ -378,6 +384,19 @@ public class Gift implements Serializable {
 
     public void setGiftSeason(GiftSeason giftSeason) {
         this.giftSeason = giftSeason;
+    }
+
+    public GiftProvider getGiftProvider() {
+        return this.giftProvider;
+    }
+
+    public Gift giftProvider(GiftProvider giftProvider) {
+        this.setGiftProvider(giftProvider);
+        return this;
+    }
+
+    public void setGiftProvider(GiftProvider giftProvider) {
+        this.giftProvider = giftProvider;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -74,8 +74,11 @@ public class GiftAdminDTO implements Serializable {
 
     private Long giftSeasonId;
 
-    @JsonIgnore
     private GiftSeasonAdminDTO giftSeason;
+
+    private Long giftProviderId;
+
+    private GiftProviderAdminDTO giftProvider;
 
     @Valid
     @NotEmpty

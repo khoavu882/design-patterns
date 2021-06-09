@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.malu.base.gift.admin.repository.GiftAdminRepository;
 import com.malu.base.gift.admin.service.GiftAdminService;
 import com.malu.base.gift.admin.service.GiftLangAdminService;
+import com.malu.base.gift.admin.service.GiftProviderAdminService;
 import com.malu.base.gift.admin.service.GiftSeasonAdminService;
 import com.malu.base.gift.admin.service.dto.GiftAdminDTO;
 import com.malu.base.gift.admin.service.dto.GiftLangAdminDTO;
@@ -12,6 +13,7 @@ import com.malu.base.gift.admin.web.rest.vm.GiftAdminVM;
 import com.malu.base.gift.admin.web.rest.vm.mapper.GiftAdminVMMapper;
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.Gift;
+import com.malu.base.gift.domain.GiftProvider;
 import com.malu.base.gift.domain.enumeration.EnumErrors;
 import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import com.malu.base.gift.repository.GiftRepository;
@@ -19,8 +21,8 @@ import com.malu.base.gift.service.dto.GiftExtDTO;
 import com.malu.base.gift.service.impl.GiftExtServiceImpl;
 import com.malu.base.gift.service.mapper.GiftLangExtMapper;
 import com.malu.base.gift.service.mapper.GiftMapper;
+import com.malu.base.gift.service.mapper.GiftProviderExtMapper;
 import com.malu.base.gift.service.mapper.GiftSeasonExtMapper;
-import com.malu.base.gift.util.GenerateUtil;
 import com.malu.base.gift.web.rest.errors.BadRequestAlertException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +32,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,6 +54,10 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
     private GiftSeasonAdminService giftSeasonAdminService;
 
     @Autowired
+    @Qualifier(ApplicationConstant.ADMIN)
+    private GiftProviderAdminService giftProviderAdminService;
+
+    @Autowired
     private GiftAdminVMMapper giftAdminVMMapper;
 
     @Autowired
@@ -65,6 +68,9 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
 
     @Autowired
     private GiftLangExtMapper giftLangExtMapper;
+
+    @Autowired
+    private GiftProviderExtMapper gifProviderExtMapper;
 
     public GiftAdminServiceImpl(GiftRepository giftRepository, GiftMapper giftMapper) {
         super(giftRepository, giftMapper);
@@ -109,9 +115,9 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
             giftExtDTO.setTerms(giftAdminDTO.getTerms());
             giftExtDTO.setTags(gson.toJson(giftAdminDTO.getTags()));
             giftExtDTO.setStatus(EnumGiftStatus.ACTIVATED);
+            GiftProvider giftProvider = giftProviderAdminService.findOneById(giftAdminDTO.getGiftProviderId() == null ? 1L : giftAdminDTO.getGiftProviderId());
+            giftExtDTO.setGiftProvider(gifProviderExtMapper.toDto(giftProvider));
 //            giftExtDTO.setLanguages(giftLangExtMapper.toDto(giftLangAdminDTOMapper.toEntity(giftAdminDTO.getLanguages())));
-//            GiftSeason giftSeason = giftSeasonAdminService.findOneById(giftAdminDTO.getGiftSeasonId() == null ? 1L : giftAdminDTO.getGiftSeasonId());
-//            giftExtDTO.setGiftSeason(giftSeasonExtMapper.toDto(giftSeason));
         } else {
             throw new BadRequestAlertException(EnumErrors.GIFT_DEFAULT_LANGUAGE_EMPTY);
         }

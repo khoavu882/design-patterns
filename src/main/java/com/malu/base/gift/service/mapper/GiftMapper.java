@@ -7,9 +7,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Gift} and its DTO {@link GiftDTO}.
  */
-@Mapper(componentModel = "spring", uses = { GiftSeasonMapper.class })
+@Mapper(componentModel = "spring", uses = { GiftSeasonMapper.class, GiftProviderMapper.class })
 public interface GiftMapper extends EntityMapper<GiftDTO, Gift> {
     @Mapping(target = "giftSeason", source = "giftSeason", qualifiedByName = "id")
+    @Mapping(target = "giftProvider", source = "giftProvider", qualifiedByName = "id")
     GiftDTO toDto(Gift s);
 
     @Named("id")
