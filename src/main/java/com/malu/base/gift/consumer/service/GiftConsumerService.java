@@ -1,6 +1,5 @@
 package com.malu.base.gift.consumer.service;
 
-import com.malu.base.gift.consumer.service.dto.GiftConsumerDTO;
 import com.malu.base.gift.consumer.web.rest.vm.GiftConsumerVM;
 import com.malu.base.gift.service.GiftExtService;
 import org.springframework.data.domain.Page;
@@ -13,22 +12,6 @@ import org.springframework.data.domain.Pageable;
  * Time: 23:19
  */
 public interface GiftConsumerService extends GiftExtService {
-    /**
-     * create a gift.
-     *
-     * @param giftConsumerDTO the entity to create.
-     * @return the persisted entity.
-     */
-    GiftConsumerVM createByConsumer(GiftConsumerDTO giftConsumerDTO);
-
-    /**
-     * update a gift.
-     *
-     * @param giftConsumerDTO the entity to update.
-     * @return the persisted entity.
-     */
-    GiftConsumerVM updateByConsumer(GiftConsumerDTO giftConsumerDTO);
-
     /**
      * Get all the gift.
      *

@@ -1,14 +1,8 @@
 package com.malu.base.gift.consumer.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -21,15 +15,6 @@ import lombok.Data;
 public class GiftConsumerDTO implements Serializable {
 
     private Long id;
-
-    @Size(max = 200)
-    private String hashCode;
-
-    @Size(max = 200)
-    private String code;
-
-    @Size(max = 200)
-    private String serial;
 
     @Size(max = 500)
     private String name;
@@ -54,27 +39,4 @@ public class GiftConsumerDTO implements Serializable {
     private Instant startDate;
 
     private Instant expireDate;
-
-    @Size(max = 5000)
-    private String useGuide;
-
-    @Size(max = 5000)
-    private String terms;
-
-    @Size(max = 5000)
-    private String tags;
-
-    private EnumGiftStatus status;
-
-    @Size(max = 20)
-    private String userId;
-
-    private Long giftSeasonId;
-
-    @JsonIgnore
-    private GiftSeasonConsumerDTO giftSeason;
-
-    @Valid
-    @NotEmpty
-    private List<GiftLangConsumerDTO> languages = new ArrayList<>();
 }
