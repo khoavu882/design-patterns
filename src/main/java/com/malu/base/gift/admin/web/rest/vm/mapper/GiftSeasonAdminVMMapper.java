@@ -9,6 +9,6 @@ import org.mapstruct.Mapper;
 /**
  * Mapper for the entity {@link GiftSeason} and its DTO {@link GiftSeasonAdminVM}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {GiftProviderAdminVMMapper.class})
 public interface GiftSeasonAdminVMMapper extends EntityMapper<GiftSeasonAdminVM, GiftSeason> {
 }
