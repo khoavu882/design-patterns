@@ -5,6 +5,7 @@ import com.malu.base.gift.admin.service.dto.GiftAdminDTO;
 import com.malu.base.gift.admin.web.rest.vm.GiftAdminVM;
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.Gift;
+import com.malu.base.gift.domain.enumeration.ActionStatus;
 import com.malu.base.gift.service.GiftExtService;
 import com.malu.base.gift.service.dto.GiftDTO;
 import com.malu.base.gift.service.dto.GiftExtDTO;
@@ -92,24 +93,39 @@ public class GiftAdminResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of gifts in body.
      */
     @GetMapping("/gifts")
-    public ResponseEntity<List<GiftDTO>> getAllGifts(Pageable pageable) {
+    public ResponseEntity<List<GiftAdminVM>> getAllGifts(@RequestParam(value = "keyword", required = false) String keyword,
+                                                         @RequestParam(value = "status", required = false) ActionStatus status,
+                                                         Pageable pageable) {
         log.debug("REST request to get a page of Gifts");
-        Page<GiftDTO> page = giftAdminService.findAll(pageable);
+        Page<GiftAdminVM> page = giftAdminService.findAllWithFilterByAdmin(keyword, status, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * {@code GET  /gifts/details/:id} : get the "id" gift.
+     * {@code GET  /gifts/details/:hashCode} : get the "hashCode" gift.
      *
-     * @param id the id of the giftDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the giftDTO, or with status {@code 404 (Not Found)}.
+     * @param hashCode the id of the GiftAdminVM to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the GiftAdminVM, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/gifts/details/{id}")
-    public ResponseEntity<GiftDTO> getGift(@PathVariable Long id) {
+    @GetMapping("/gifts/details/{hashCode}")
+    public ResponseEntity<GiftAdminVM> getGiftByHashCode(@PathVariable String hashCode) {
+        log.debug("REST request to get Gift : {}", hashCode);
+        GiftAdminVM giftAdminVM = giftAdminService.adminFindOneByHashCode(hashCode);
+        return ResponseEntity.ok().body(giftAdminVM);
+    }
+
+    /**
+     * {@code GET  /gifts/:id} : get the "id" gift.
+     *
+     * @param id the id of the GiftAdminVM to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the GiftAdminVM, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/gifts/{id}")
+    public ResponseEntity<GiftAdminVM> getGiftById(@PathVariable Long id) {
         log.debug("REST request to get Gift : {}", id);
-        Optional<GiftDTO> giftDTO = giftAdminService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(giftDTO);
+        GiftAdminVM giftAdminVM = giftAdminService.adminFindOneById(id);
+        return ResponseEntity.ok().body(giftAdminVM);
     }
 
     /**

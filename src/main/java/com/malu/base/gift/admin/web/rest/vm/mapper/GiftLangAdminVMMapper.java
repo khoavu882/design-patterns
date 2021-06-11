@@ -12,6 +12,6 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link GiftLang} and its DTO {@link GiftLangAdminVM}.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { GiftAdminVMMapper.class })
 public interface GiftLangAdminVMMapper extends EntityMapper<GiftLangAdminVM, GiftLang> {
 }
