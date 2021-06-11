@@ -6,6 +6,7 @@ import com.malu.base.gift.admin.web.rest.vm.GiftAdminVM;
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.Gift;
 import com.malu.base.gift.domain.enumeration.ActionStatus;
+import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import com.malu.base.gift.service.GiftExtService;
 import com.malu.base.gift.service.dto.GiftDTO;
 import com.malu.base.gift.service.dto.GiftExtDTO;
@@ -97,7 +98,7 @@ public class GiftAdminResource {
      */
     @GetMapping("/gifts")
     public ResponseEntity<List<GiftAdminVM>> getAllGifts(@RequestParam(value = "keyword", required = false) String keyword,
-                                                         @RequestParam(value = "status", required = false) ActionStatus status,
+                                                         @RequestParam(value = "status", required = false) EnumGiftStatus status,
                                                          @PageableDefault(size = 20,page = 0)
                                                              @SortDefault.SortDefaults({
                                                                  @SortDefault(sort = "lastModifiedDate", direction = Sort.Direction.DESC)

@@ -126,7 +126,7 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
     }
 
     @Override
-    public Page<GiftAdminVM> findAllWithFilterByAdmin(String keyword, ActionStatus status, Pageable pageable) {
+    public Page<GiftAdminVM> findAllWithFilterByAdmin(String keyword, EnumGiftStatus status, Pageable pageable) {
         return findAllWithFilter(keyword, status, pageable).map(giftAdminVMMapper::toDto);
     }
 

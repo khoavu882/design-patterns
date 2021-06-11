@@ -8,6 +8,7 @@ import com.malu.base.gift.consumer.web.rest.vm.GiftOwnerConsumerVM;
 import com.malu.base.gift.consumer.web.rest.vm.mapper.GiftConsumerVMMapper;
 import com.malu.base.gift.consumer.web.rest.vm.mapper.GiftOwnerConsumerVMMapper;
 import com.malu.base.gift.domain.enumeration.ActionStatus;
+import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import com.malu.base.gift.repository.GiftRepository;
 import com.malu.base.gift.security.SecurityUtils;
 import com.malu.base.gift.service.GiftExtService;
@@ -47,11 +48,11 @@ public class GiftConsumerServiceImpl extends GiftExtServiceImpl implements GiftC
 
     @Override
     public Page<GiftConsumerVM> findAllWithFilterByConsumer(String keyword, Pageable pageable) {
-        return giftExtService.findAllWithFilter(keyword, ActionStatus.ACTIVATED, pageable).map(giftConsumerVMMapper::toDto);
+        return giftExtService.findAllWithFilter(keyword, EnumGiftStatus.ACTIVATED, pageable).map(giftConsumerVMMapper::toDto);
     }
 
     @Override
     public Page<GiftOwnerConsumerVM> findAllWithFilterByOwner(String keyword, Pageable pageable) {
-        return giftConsumerRepository.findAllWithFilterByOwner(SecurityUtils.getCurrentUserLogin().get(), keyword, ActionStatus.ACTIVATED, pageable).map(giftOwnerConsumerVMMapper::toDto);
+        return giftConsumerRepository.findAllWithFilterByOwner(SecurityUtils.getCurrentUserLogin().get(), keyword, EnumGiftStatus.ACTIVATED, pageable).map(giftOwnerConsumerVMMapper::toDto);
     }
 }

@@ -2,6 +2,7 @@ package com.malu.base.gift.service;
 
 import com.malu.base.gift.domain.Gift;
 import com.malu.base.gift.domain.enumeration.ActionStatus;
+import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import com.malu.base.gift.service.dto.GiftExtDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +47,7 @@ public interface GiftExtService extends GiftService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<Gift> findAllWithFilter(String keyword, ActionStatus status, Pageable pageable);
+    Page<Gift> findAllWithFilter(String keyword, EnumGiftStatus status, Pageable pageable);
 
     /**
      * Get the "id" gift.

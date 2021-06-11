@@ -4,6 +4,7 @@ import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.Gift;
 import com.malu.base.gift.domain.enumeration.ActionStatus;
 import com.malu.base.gift.domain.enumeration.EnumErrors;
+import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import com.malu.base.gift.repository.GiftExtRepository;
 import com.malu.base.gift.repository.GiftRepository;
 import com.malu.base.gift.service.GiftExtService;
@@ -81,7 +82,7 @@ public class GiftExtServiceImpl extends GiftServiceImpl implements GiftExtServic
     }
 
     @Override
-    public Page<Gift> findAllWithFilter(String keyword, ActionStatus status, Pageable pageable) {
+    public Page<Gift> findAllWithFilter(String keyword, EnumGiftStatus status, Pageable pageable) {
         return giftExtRepository.findAllWithFilter(keyword, status, pageable);
     }
 

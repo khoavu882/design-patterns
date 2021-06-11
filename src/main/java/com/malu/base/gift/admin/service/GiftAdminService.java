@@ -3,6 +3,7 @@ package com.malu.base.gift.admin.service;
 import com.malu.base.gift.admin.service.dto.GiftAdminDTO;
 import com.malu.base.gift.admin.web.rest.vm.GiftAdminVM;
 import com.malu.base.gift.domain.enumeration.ActionStatus;
+import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import com.malu.base.gift.service.GiftExtService;
 import com.malu.base.gift.service.dto.GiftExtDTO;
 import com.malu.base.gift.service.dto.GiftSeasonExtDTO;
@@ -39,7 +40,7 @@ public interface GiftAdminService extends GiftExtService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<GiftAdminVM> findAllWithFilterByAdmin(String keyword, ActionStatus status, Pageable pageable);
+    Page<GiftAdminVM> findAllWithFilterByAdmin(String keyword, EnumGiftStatus status, Pageable pageable);
 
     /**
      * Get the "id" gift.

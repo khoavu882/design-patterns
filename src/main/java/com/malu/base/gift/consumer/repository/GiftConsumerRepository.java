@@ -2,7 +2,7 @@ package com.malu.base.gift.consumer.repository;
 
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.Gift;
-import com.malu.base.gift.domain.enumeration.ActionStatus;
+import com.malu.base.gift.domain.enumeration.EnumGiftStatus;
 import com.malu.base.gift.repository.GiftExtRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -27,6 +27,6 @@ public interface GiftConsumerRepository extends GiftExtRepository {
         "AND (:status IS NULL OR g.status = :status)")
     Page<Gift> findAllWithFilterByOwner(@Param("userId") String userId,
                                         @Param("keyword") String keyword,
-                                        @Param("status") ActionStatus status,
+                                        @Param("status") EnumGiftStatus status,
                                         Pageable pageable);
 }
