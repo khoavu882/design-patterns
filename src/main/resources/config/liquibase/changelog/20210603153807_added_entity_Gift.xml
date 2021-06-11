@@ -68,6 +68,9 @@
             <column name="gift_season_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="gift_provider_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="gift" columnName="publish_date" columnDataType="${datetimeType}"/>

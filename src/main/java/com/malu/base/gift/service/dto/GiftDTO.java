@@ -63,6 +63,8 @@ public class GiftDTO implements Serializable {
 
     private GiftSeasonDTO giftSeason;
 
+    private GiftProviderDTO giftProvider;
+
     public Long getId() {
         return id;
     }
@@ -215,6 +217,14 @@ public class GiftDTO implements Serializable {
         this.giftSeason = giftSeason;
     }
 
+    public GiftProviderDTO getGiftProvider() {
+        return giftProvider;
+    }
+
+    public void setGiftProvider(GiftProviderDTO giftProvider) {
+        this.giftProvider = giftProvider;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -259,6 +269,7 @@ public class GiftDTO implements Serializable {
             ", status='" + getStatus() + "'" +
             ", userId='" + getUserId() + "'" +
             ", giftSeason=" + getGiftSeason() +
+            ", giftProvider=" + getGiftProvider() +
             "}";
     }
 }

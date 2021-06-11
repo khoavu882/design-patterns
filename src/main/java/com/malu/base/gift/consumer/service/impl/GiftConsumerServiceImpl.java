@@ -4,8 +4,13 @@ import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.consumer.repository.GiftConsumerRepository;
 import com.malu.base.gift.consumer.service.GiftConsumerService;
 import com.malu.base.gift.consumer.web.rest.vm.GiftConsumerVM;
+import com.malu.base.gift.consumer.web.rest.vm.GiftOwnerConsumerVM;
 import com.malu.base.gift.consumer.web.rest.vm.mapper.GiftConsumerVMMapper;
+import com.malu.base.gift.consumer.web.rest.vm.mapper.GiftOwnerConsumerVMMapper;
+import com.malu.base.gift.domain.enumeration.ActionStatus;
 import com.malu.base.gift.repository.GiftRepository;
+import com.malu.base.gift.security.SecurityUtils;
+import com.malu.base.gift.service.GiftExtService;
 import com.malu.base.gift.service.impl.GiftExtServiceImpl;
 import com.malu.base.gift.service.mapper.GiftMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +32,14 @@ public class GiftConsumerServiceImpl extends GiftExtServiceImpl implements GiftC
     private GiftConsumerRepository giftConsumerRepository;
 
     @Autowired
+    @Qualifier(ApplicationConstant.EXTEND)
+    private GiftExtService giftExtService;
+
+    @Autowired
     private GiftConsumerVMMapper giftConsumerVMMapper;
+
+    @Autowired
+    private GiftOwnerConsumerVMMapper giftOwnerConsumerVMMapper;
 
     public GiftConsumerServiceImpl(GiftRepository giftRepository, GiftMapper giftMapper) {
         super(giftRepository, giftMapper);
@@ -35,11 +47,11 @@ public class GiftConsumerServiceImpl extends GiftExtServiceImpl implements GiftC
 
     @Override
     public Page<GiftConsumerVM> findAllWithFilterByConsumer(String keyword, Pageable pageable) {
-        return giftConsumerRepository.findAllWithFilter(keyword, pageable).map(giftConsumerVMMapper::toDto);
+        return giftExtService.findAllWithFilter(keyword, ActionStatus.ACTIVATED, pageable).map(giftConsumerVMMapper::toDto);
     }
 
     @Override
-    public GiftConsumerVM findOneByConsumer(Long id) {
-        return giftConsumerVMMapper.toDto(findOneById(id));
+    public Page<GiftOwnerConsumerVM> findAllWithFilterByOwner(String keyword, Pageable pageable) {
+        return giftConsumerRepository.findAllWithFilterByOwner(SecurityUtils.getCurrentUserLogin().get(), keyword, ActionStatus.ACTIVATED, pageable).map(giftOwnerConsumerVMMapper::toDto);
     }
 }

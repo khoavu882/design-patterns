@@ -30,8 +30,6 @@ public class GiftLangExtDTO implements Serializable {
 
     private Long giftId;
 
-    private GiftExtDTO gift;
-
     public Long getId() {
         return id;
     }
@@ -96,14 +94,6 @@ public class GiftLangExtDTO implements Serializable {
         this.giftId = giftId;
     }
 
-    public GiftExtDTO getGift() {
-        return gift;
-    }
-
-    public void setGift(GiftExtDTO gift) {
-        this.gift = gift;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -136,7 +126,6 @@ public class GiftLangExtDTO implements Serializable {
             ", terms='" + getTerms() + "'" +
             ", langCode='" + getLangCode() + "'" +
             ", status='" + getStatus() + "'" +
-            ", gift=" + getGift() +
             "}";
     }
 }

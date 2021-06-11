@@ -1,10 +1,10 @@
 package com.malu.base.gift.service;
 
 import com.malu.base.gift.domain.Gift;
-import com.malu.base.gift.service.dto.GiftDTO;
+import com.malu.base.gift.domain.enumeration.ActionStatus;
 import com.malu.base.gift.service.dto.GiftExtDTO;
-
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Created by Khoa Vu.
@@ -39,10 +39,36 @@ public interface GiftExtService extends GiftService {
     Gift update(GiftExtDTO giftExtDTO);
 
     /**
+     * Get all the gift.
+     *
+     * @param keyword .
+     * @param status .
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<Gift> findAllWithFilter(String keyword, ActionStatus status, Pageable pageable);
+
+    /**
      * Get the "id" gift.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
     Gift findOneById(Long id);
+
+    /**
+     * Get the "code" gift.
+     *
+     * @param code the id of the entity.
+     * @return the entity.
+     */
+    void checkExistsByCode(String code);
+
+    /**
+     * Get the "hashCode" gift.
+     *
+     * @param hashCode the hashCode of the entity.
+     * @return the entity.
+     */
+    Gift findOneByHashCode(String hashCode);
 }

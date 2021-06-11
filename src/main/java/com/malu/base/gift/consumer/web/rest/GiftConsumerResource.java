@@ -3,6 +3,7 @@ package com.malu.base.gift.consumer.web.rest;
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.consumer.service.GiftConsumerService;
 import com.malu.base.gift.consumer.web.rest.vm.GiftConsumerVM;
+import com.malu.base.gift.consumer.web.rest.vm.GiftOwnerConsumerVM;
 import com.malu.base.gift.domain.Gift;
 import com.malu.base.gift.service.dto.GiftDTO;
 import java.util.List;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,10 +51,33 @@ public class GiftConsumerResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of gifts in body.
      */
-    @GetMapping(value = { "/gifts", "/gifts/{keyword}" })
-    public ResponseEntity<List<GiftConsumerVM>> getAllGifts(@PathVariable Optional<String> keyword, Pageable pageable) {
+    @GetMapping("/gifts")
+    public ResponseEntity<List<GiftConsumerVM>> getAllGifts(@RequestParam(value = "keyword", required = false) String keyword,
+                                                            @PageableDefault(size = 20,page = 0)
+                                                            @SortDefault.SortDefaults({
+                                                                @SortDefault(sort = "lastModifiedDate", direction = Sort.Direction.DESC)
+                                                            }) Pageable pageable) {
         log.debug("REST request to get a page of Gifts");
-        Page<GiftConsumerVM> page = giftConsumerService.findAllWithFilterByConsumer(keyword.orElse(null), pageable);
+        Page<GiftConsumerVM> page = giftConsumerService.findAllWithFilterByConsumer(keyword, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  } : get all the gifts.
+     *
+     * @param keyword the keyword for search.
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of gifts in body.
+     */
+    @GetMapping("/owner/gifts")
+    public ResponseEntity<List<GiftOwnerConsumerVM>> getAllGiftsByOwner(@RequestParam(value = "keyword", required = false) String keyword,
+                                                                        @PageableDefault(size = 20,page = 0)
+                                                            @SortDefault.SortDefaults({
+                                                                @SortDefault(sort = "lastModifiedDate", direction = Sort.Direction.DESC)
+                                                            }) Pageable pageable) {
+        log.debug("REST request to get a page of Gifts");
+        Page<GiftOwnerConsumerVM> page = giftConsumerService.findAllWithFilterByOwner(keyword, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

@@ -1,5 +1,11 @@
 package com.malu.base.gift.consumer.web.rest.vm;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.malu.base.gift.admin.web.rest.vm.GiftLangAdminVM;
+import com.malu.base.gift.admin.web.rest.vm.GiftProviderAdminVM;
+import com.malu.base.gift.constant.ApplicationConstant;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -7,21 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.malu.base.gift.constant.ApplicationConstant;
-import lombok.Data;
-
 /**
  * A DTO for the {@link com.malu.base.gift.domain.Gift} entity.
  */
 
 @Data
-public class GiftConsumerVM implements Serializable {
+public class GiftOwnerConsumerVM implements Serializable {
 
     @JsonIgnore
     private Long id;
 
     private String hashCode;
+
+    private String code;
 
     private String name;
 
@@ -38,10 +42,7 @@ public class GiftConsumerVM implements Serializable {
     @JsonIgnore
     private Instant publishDate;
 
-    @JsonIgnore
     private Instant startDate;
-
-    @JsonIgnore
 
     private Instant expireDate;
 

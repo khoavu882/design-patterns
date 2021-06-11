@@ -44,10 +44,10 @@ public class GiftExtDTO implements Serializable {
     private String mediaPath;
 
     @NotNull
-    private BigDecimal originalPrice;
-
-    @NotNull
     private BigDecimal price;
+    
+    @NotNull
+    private BigDecimal originalPrice;
 
     private Instant publishDate;
 
@@ -70,6 +70,8 @@ public class GiftExtDTO implements Serializable {
     private String userId;
 
     private GiftSeasonExtDTO giftSeason;
+
+    private GiftProviderExtDTO giftProvider;
 
     @Valid
     @NotEmpty

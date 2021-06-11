@@ -90,7 +90,7 @@ public class GiftAdminServiceImpl extends GiftExtServiceImpl implements GiftAdmi
         GiftExtDTO giftExtDTO = initGift(giftAdminDTO);
         giftExtDTO.setId(giftAdminDTO.getId());
         Gift gift = update(giftExtDTO);
-            giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift, false);
+        giftLangAdminService.translateGift(giftAdminDTO.getLanguages(), gift, false);
         return giftAdminVMMapper.toDto(gift);
     }
 

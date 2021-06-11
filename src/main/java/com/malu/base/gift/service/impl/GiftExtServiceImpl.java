@@ -2,6 +2,7 @@ package com.malu.base.gift.service.impl;
 
 import com.malu.base.gift.constant.ApplicationConstant;
 import com.malu.base.gift.domain.Gift;
+import com.malu.base.gift.domain.enumeration.ActionStatus;
 import com.malu.base.gift.domain.enumeration.EnumErrors;
 import com.malu.base.gift.repository.GiftExtRepository;
 import com.malu.base.gift.repository.GiftRepository;
@@ -13,6 +14,8 @@ import com.malu.base.gift.web.rest.errors.BadRequestAlertException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +62,7 @@ public class GiftExtServiceImpl extends GiftServiceImpl implements GiftExtServic
 //            throw new BadRequestAlertException(EnumErrors.GIFT_DEFAULT_LANGUAGE_EMPTY);
 //        }
 //        giftExtDTO.setLanguages(new ArrayList<>());
+        checkExistsByCode(giftExtDTO.getCode());
         Gift gift = giftExtMapper.toEntity(giftExtDTO);
         return save(gift);
     }
@@ -68,15 +72,35 @@ public class GiftExtServiceImpl extends GiftServiceImpl implements GiftExtServic
         if(giftExtDTO.getId() == null) throw new BadRequestAlertException(EnumErrors.GIFT_NOT_FOUND);
         Gift gift = findOneById(giftExtDTO.getId());
         Gift newGift = giftExtMapper.toEntity(giftExtDTO);
+        if(!newGift.getCode().equals(gift.getCode())) checkExistsByCode(newGift.getCode());
         newGift.setId(gift.getId());
+        newGift.setHashCode(gift.getHashCode());
         newGift.setLanguages(gift.getLanguages());
         newGift.setStatus(gift.getStatus());
         return save(newGift);
     }
 
     @Override
+    public Page<Gift> findAllWithFilter(String keyword, ActionStatus status, Pageable pageable) {
+        return giftExtRepository.findAllWithFilter(keyword, status, pageable);
+    }
+
+    @Override
     public Gift findOneById(Long id) {
         Optional<Gift> optionalGift = giftExtRepository.findById(id);
+        if(optionalGift.isEmpty()) throw new BadRequestAlertException(EnumErrors.GIFT_NOT_FOUND);
+        return optionalGift.get();
+    }
+
+    @Override
+    public void checkExistsByCode(String code) {
+        Optional<Gift> optionalGift = giftExtRepository.findByCode(code);
+        if(optionalGift.isPresent()) throw new BadRequestAlertException(EnumErrors.GIFT_EXISTS);
+    }
+
+    @Override
+    public Gift findOneByHashCode(String hashCode) {
+        Optional<Gift> optionalGift = giftExtRepository.findByHashCode(hashCode);
         if(optionalGift.isEmpty()) throw new BadRequestAlertException(EnumErrors.GIFT_NOT_FOUND);
         return optionalGift.get();
     }

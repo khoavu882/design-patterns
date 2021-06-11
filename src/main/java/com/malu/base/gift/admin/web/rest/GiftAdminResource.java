@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -95,7 +98,10 @@ public class GiftAdminResource {
     @GetMapping("/gifts")
     public ResponseEntity<List<GiftAdminVM>> getAllGifts(@RequestParam(value = "keyword", required = false) String keyword,
                                                          @RequestParam(value = "status", required = false) ActionStatus status,
-                                                         Pageable pageable) {
+                                                         @PageableDefault(size = 20,page = 0)
+                                                             @SortDefault.SortDefaults({
+                                                                 @SortDefault(sort = "lastModifiedDate", direction = Sort.Direction.DESC)
+                                                             }) Pageable pageable) {
         log.debug("REST request to get a page of Gifts");
         Page<GiftAdminVM> page = giftAdminService.findAllWithFilterByAdmin(keyword, status, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

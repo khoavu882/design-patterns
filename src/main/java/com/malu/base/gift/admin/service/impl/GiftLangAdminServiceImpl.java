@@ -43,14 +43,14 @@ public class GiftLangAdminServiceImpl extends GiftLangExtServiceImpl implements 
                 giftLangExtDTO.setLangCode(giftLangAdminDTO.getLangCode());
                 giftLangExtDTO.setTerms(giftLangAdminDTO.getTerms());
                 giftLangExtDTO.setUseGuide(giftLangAdminDTO.getUseGuide());
-                giftLangExtDTO.setGift(giftExtMapper.toDto(gift));
                 giftLangExtDTO.setStatus(ActionStatus.ACTIVATED);
+                giftLangExtDTO.setGiftId(gift.getId());
                 GiftLang giftLang = null;
                 if(isCreate)
                     giftLang = this.create(giftLangExtDTO);
                 else
                     giftLang = this.update(giftLangExtDTO);
-                gift.getLanguages().add(giftLang);
+                giftLang.setGift(gift);
             });
     }
 }

@@ -8,6 +8,7 @@ package com.malu.base.gift.domain.enumeration;
  */
 public enum EnumErrors {
     GIFT_NOT_FOUND("Gift", "NotFound", ""),
+    GIFT_EXISTS("Gift", "Exists", ""),
     GIFT_LANG_NOT_FOUND("GiftLang", "NotFound", ""),
     GIFT_DEFAULT_LANGUAGE_EMPTY("GiftDefaultLanguage", "Empty", ""),
     GIFT_SEASON_NOT_FOUND("GiftSeason", "NotFound", ""),

@@ -1,6 +1,7 @@
 package com.malu.base.gift.consumer.service;
 
 import com.malu.base.gift.consumer.web.rest.vm.GiftConsumerVM;
+import com.malu.base.gift.consumer.web.rest.vm.GiftOwnerConsumerVM;
 import com.malu.base.gift.service.GiftExtService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
  * Time: 23:19
  */
 public interface GiftConsumerService extends GiftExtService {
+
     /**
      * Get all the gift.
      *
@@ -21,10 +23,10 @@ public interface GiftConsumerService extends GiftExtService {
     Page<GiftConsumerVM> findAllWithFilterByConsumer(String keyword, Pageable pageable);
 
     /**
-     * Get the "id" gift.
+     * Get all the gift.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
-    GiftConsumerVM findOneByConsumer(Long id);
+    Page<GiftOwnerConsumerVM> findAllWithFilterByOwner(String keyword, Pageable pageable);
 }
