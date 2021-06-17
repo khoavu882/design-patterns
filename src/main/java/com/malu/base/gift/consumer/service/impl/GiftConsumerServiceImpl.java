@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @Qualifier(ApplicationConstant.CONSUMER)
@@ -54,5 +56,20 @@ public class GiftConsumerServiceImpl extends GiftExtServiceImpl implements GiftC
     @Override
     public Page<GiftOwnerConsumerVM> findAllWithFilterByOwner(String keyword, Pageable pageable) {
         return giftConsumerRepository.findAllWithFilterByOwner(SecurityUtils.getCurrentUserLogin().get(), keyword, EnumGiftStatus.ACTIVATED, pageable).map(giftOwnerConsumerVMMapper::toDto);
+    }
+
+    @Override
+    public GiftConsumerVM findOneByHashCodeByConsumer(String hashCode) {
+        return giftConsumerVMMapper.toDto(findOneByHashCode(hashCode));
+    }
+
+    @Override
+    public List<GiftConsumerVM> findByListHashCodeByConsumer(List<String> listHashCode) {
+        return giftConsumerVMMapper.toDto(giftConsumerRepository.findByListHashCodeByConsumer(listHashCode));
+    }
+
+    @Override
+    public GiftOwnerConsumerVM findOneByHashCodeByOwner(String hashCode) {
+        return giftOwnerConsumerVMMapper.toDto(findOneByHashCode(hashCode));
     }
 }

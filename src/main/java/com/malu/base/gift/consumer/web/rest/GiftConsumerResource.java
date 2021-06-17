@@ -24,6 +24,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import javax.validation.Valid;
+
 /**
  * REST controller for managing {@link Gift}.
  */
@@ -83,15 +85,41 @@ public class GiftConsumerResource {
     }
 
     /**
-     * {@code GET  /gifts/details/:id} : get the "id" gift.
+     * {@code GET  /gifts/details} : get the "id" gift.
      *
-     * @param id the id of the giftDTO to retrieve.
+     * @param listHashCode the id of the giftDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the giftDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/gifts/details/{id}")
-    public ResponseEntity<GiftDTO> getGift(@PathVariable Long id) {
-        log.debug("REST request to get Gift : {}", id);
-        Optional<GiftDTO> giftDTO = giftConsumerService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(giftDTO);
+    @GetMapping("/gifts/details")
+    public ResponseEntity<List<GiftConsumerVM>> getGiftsByListHashCode(@RequestBody @Valid List<String> listHashCode) {
+        log.debug("REST request to get Gifts by list Hash Code : {}", listHashCode);
+        List<GiftConsumerVM> giftConsumerVM = giftConsumerService.findByListHashCodeByConsumer(listHashCode);
+        return ResponseEntity.ok().body(giftConsumerVM);
+    }
+
+    /**
+     * {@code GET  /gifts/details/:hashCode} : get the "id" gift.
+     *
+     * @param hashCode the id of the giftDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the giftDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/gifts/details/{hashCode}")
+    public ResponseEntity<GiftConsumerVM> getGift(@PathVariable String hashCode) {
+        log.debug("REST request to get Gift : {}", hashCode);
+        GiftConsumerVM giftOwnerConsumerVM = giftConsumerService.findOneByHashCodeByConsumer(hashCode);
+        return ResponseEntity.ok().body(giftOwnerConsumerVM);
+    }
+
+    /**
+     * {@code GET  /owner/gifts/details/:hashCode} : get the "id" gift.
+     *
+     * @param hashCode the id of the giftDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the giftDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/owner/gifts/details/{hashCode}")
+    public ResponseEntity<GiftOwnerConsumerVM> getGiftByOwner(@PathVariable String hashCode) {
+        log.debug("REST request to get Gift : {}", hashCode);
+        GiftOwnerConsumerVM giftOwnerConsumerVM = giftConsumerService.findOneByHashCodeByOwner(hashCode);
+        return ResponseEntity.ok().body(giftOwnerConsumerVM);
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by Khoa Vu.
  * Mail: khoa.vu@vslsoft.com
@@ -29,4 +31,7 @@ public interface GiftConsumerRepository extends GiftExtRepository {
                                         @Param("keyword") String keyword,
                                         @Param("status") EnumGiftStatus status,
                                         Pageable pageable);
+
+    @Query(value = "FROM Gift g WHERE g.hashCode IN :listHashCode")
+    List<Gift> findByListHashCodeByConsumer(@Param("listHashCode") List<String> listHashCode);
 }
