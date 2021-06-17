@@ -1,5 +1,7 @@
 package com.malu.base.gift.consumer.web.rest.vm.mapper;
 
+import com.malu.base.gift.admin.web.rest.vm.GiftAdminVM;
+import com.malu.base.gift.admin.web.rest.vm.mapper.GiftLangAdminVMMapper;
 import com.malu.base.gift.consumer.web.rest.vm.GiftConsumerVM;
 import com.malu.base.gift.domain.Gift;
 import com.malu.base.gift.service.mapper.EntityMapper;
